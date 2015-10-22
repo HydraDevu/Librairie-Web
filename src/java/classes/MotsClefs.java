@@ -1,7 +1,9 @@
 
 package classes;
 
-public class MotsClefs {
+import java.io.Serializable;
+
+public class MotsClefs implements Serializable{
     
     private int idMotsClefs;
     private String nomMotsClefs;

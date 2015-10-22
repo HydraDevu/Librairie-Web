@@ -1,10 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%-- 
-    Document   : jspCatalogue
-    Created on : 12 oct. 2015, 11:20:47
-    Author     : cdi418
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -21,44 +16,72 @@
 
     <body>
 
-
+<%@include file="jspHeader.jsp" %>
 
         <div class="container">
+
+            <a href="controller?payer=">payer ici</a>
 
 
 
             <h1 class="page-header text-center">mon catalogue</h1>
+            
+            <c:if test="${param.search != null}">
+                <div class="alert alert-success text-center">nombre d'article trouvé: ${nbr_article_trouve}</div>
+            </c:if>
+
+
+            <form class="formSearch" method="controller">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </span>
+                    <input class="form-control" type="text" placeholder="Entrez votre recherche" name="search">
+                </div>
+
+                <input type="hidden" name="catalog" value=""/>
+
+                <button type="submit" name="doIt" class="btn btn-default">Submit</button>
+            </form>
+            
 
 
             <div class="row">
 
-                
+
                 <%-- sommaire cote --%>
+
                 <div class="col-md-2">
 
                     <ul class="sommaire nav nav-pills nav-stacked ">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Profile</a></li>
-                        <li class="disabled"><a href="#">Disabled</a></li>
-                        <li class="dropdown">
-                            <a aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Dropdown <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </li>
+
+                        <c:forEach var="theme" items="${ListeTheme}">
+                            <li class="theme dropdown">
+                                <a aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    ${theme.nomTheme} <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu">
+
+                                    <c:forEach var="soustheme" items="${theme.getSousThemeTheme()}">
+
+                                        <li><a href="controller?catalog&categorie=${soustheme.getNomSousTheme()}">${soustheme.getNomSousTheme()}</a></li>
+
+                                    </c:forEach>
+
+                                </ul>
+
+                            </li>
+                        </c:forEach>
                     </ul>
+
+
 
                 </div>
 
 
 
-
+                <%-- article catalogue --%>
 
                 <div class="col-md-10">
 
@@ -72,33 +95,44 @@
 
                             <%-- resume du livre en mode substring --%>
                             <c:set var="resume" value="${livre.resumeLivre}"/>
-                            <c:set var="cutResume" value="${fn:substring(resume, 0, 70)}" />
+                            <c:set var="cutResume" value="${fn:substring(resume, 0, 150)}" />
 
 
-                            <tr>
+                            <tr class="livreGrille">
 
                             <div class="row">
 
                                 <td class="col-md-2"> <img src="http://lorempixel.com/400/200/"></td>
                                 <td class="col-md-6 contenu">
 
-                                    <p class="title text-center">${livre.titreLivre} <small> - ${livre.sousTitreLivre}</small></p>
-                                    <p>ecrit par: ${livre.auteurLivre.nomAuteur} ${livre.auteurLivre.prenomAuteur} <br>
-                                        Résumé: ${cutResume}...
+                                    <h4 class="title text-center text-primary">${livre.titreLivre} <small> - ${livre.sousTitreLivre}</small></h4>
+                                    <p>ecrit par: <a href="controller?auteurInf=${livre.auteurLivre.idAuteur}">${livre.auteurLivre.nomAuteur} ${livre.auteurLivre.prenomAuteur}</a></p>
+                                    <p class="resume">Résumé: ${cutResume}...</p>
+                                    <p class="text-center">
+                                        <c:forEach var="motCle" items="${livre.motsClefs}">
+                                            <a href="">${motCle.nomMotsClefs}</a>
+                                        </c:forEach>
                                     </p>
 
                                 </td>
-                                <td class="col-md-2">
+                                <td class="shop col-md-2">
 
-                                    <div style="height: 50px">
-                                        <button class="btn-lg btn btn-default btn-block">${livre.prixHTLivre}€ HT </button>
-                                    </div>
 
-                                    <div style="height: 50px">
-                                        <a href="controller?detailLivre=${livre.idLivre}"><button class="btn btn-primary">voir détail</button></a>
+                                    <p class="price">prix : ${livre.prixHTLivre}€ HT </p>
 
-                                        <button class="btn btn-success">+</button>
-                                    </div>
+                                    <c:if test="${livre.quantiteLivre > 200}">
+                                        <p class="text-success">En stock</p>
+                                    </c:if>
+
+                                    <c:if test="${livre.quantiteLivre <= 200}">
+                                        <p class="text-danger">Plus en stock</p>
+                                    </c:if>
+                                    <a href="controller?sendToPanier=${livre.idLivre}"><button class="btn btn-success">Add   <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></a>
+                                    <a href="controller?detailLivre=${livre.idLivre}"><button class="btn btn-default"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button></a>
+
+
+
+
 
 
                                 </td>
@@ -124,23 +158,16 @@
 
             <nav>
                 <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+
 
                     <c:forEach varStatus="i" begin="1" end="${nbrPage + 1}">
-
-                        <li><a href="controller?page=${i.index}">${i.index}</a></li>  
+                        <c:if test="${nbrPage >=1}">
+                        <li><a href="controller?${page}&page=${i.index}">${i.index}</a></li>  
+                        </c:if>
 
                     </c:forEach>
 
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
+
                 </ul>
             </nav>
 
@@ -150,7 +177,7 @@
 
     </body>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="css/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <a href="${pageContext.request.requestURL}?${pageContext.request.queryString}&page=2">page en cour</a> <br>
+    <a href="/&page=3">page test</a>
 
-</html>
+    <%@include file="jspFooter.jsp" %>

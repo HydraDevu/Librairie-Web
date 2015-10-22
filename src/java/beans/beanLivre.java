@@ -3,6 +3,7 @@ package beans;
 import java.beans.*;
 import classes.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class beanLivre implements Serializable {
@@ -28,7 +29,7 @@ public class beanLivre implements Serializable {
     private Editeur editeurLivre;
     private Tva tvaLivre;
     private SousTheme sousThemeLivre;
-    private HashMap motsClefs;
+    private ArrayList<MotsClefs> motsClefs;
 
     public beanLivre() {
 
@@ -36,6 +37,7 @@ public class beanLivre implements Serializable {
         this.editeurLivre = new Editeur();
         this.tvaLivre = new Tva();
         this.sousThemeLivre = new SousTheme();
+        this.motsClefs = new ArrayList();
         
     }
 
@@ -144,12 +146,24 @@ public class beanLivre implements Serializable {
         this.sousThemeLivre = sousThemeLivre;
     }
 
-    public HashMap getMotsClefs() {
+    
+    public ArrayList<MotsClefs> getMotsClefs() {
         return motsClefs;
     }
 
-    public void setMotsClefs(HashMap motsClefs) {
+    public void setMotsClefs(ArrayList motsClefs) {
         this.motsClefs = motsClefs;
+    }
+
+    @Override
+    public String toString() {
+        return "idLivre=" + idLivre + ", titreLivre=" + titreLivre + ", sousTitreLivre=" + sousTitreLivre + 
+                ", dateLivre=" + dateLivre + ", resumeLivre=" + resumeLivre + ", imageLivre=" + imageLivre + 
+                ", prixHTLivre=" + prixHTLivre + ", poidsLivre=" + poidsLivre + ", quantiteLivre=" + quantiteLivre + 
+                ", auteurLivre=" + auteurLivre.getNomAuteur() + " " + auteurLivre.getPrenomAuteur() + 
+                ", editeurLivre=" + editeurLivre.getNomEditeur() + ", tvaLivre=" + tvaLivre.getNomTauxTva() + " " + tvaLivre.getValeurTauxTva() +
+                ", sousThemeLivre=" + sousThemeLivre.getNomSousTheme() + ", motsClefs=" + motsClefs + '}';
+        
     }
 
     

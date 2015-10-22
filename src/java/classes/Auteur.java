@@ -1,11 +1,12 @@
 package classes;
 
+import beans.beanLivre;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
-
 public class Auteur {
-    
+
     private int idAuteur;
     private String nomAuteur;
     private String prenomAuteur;
@@ -13,10 +14,9 @@ public class Auteur {
     private String dateNaissanceAuteur;
     private String dateDecesAuteur;
 
-    private HashMap livreAuteur;
+    private HashMap<String, beanLivre> livreAuteur = new HashMap();
 
     public Auteur() {
-        this.livreAuteur = new HashMap<Integer,Livre>();
     }
 
     public Auteur(int idAuteur, String nomAuteur, String prenomAuteur, String biographieAuteur, String dateNaissanceAuteur, String dateDecesAuteur) {
@@ -27,7 +27,7 @@ public class Auteur {
         this.biographieAuteur = biographieAuteur;
         this.dateNaissanceAuteur = dateNaissanceAuteur;
         this.dateDecesAuteur = dateDecesAuteur;
-        
+
     }
 
     public int getIdAuteur() {
@@ -88,7 +88,11 @@ public class Auteur {
 
     @Override
     public String toString() {
-        return nomAuteur + " " + prenomAuteur  ;
+        return nomAuteur + " " + prenomAuteur;
     }
-   
+
+    public Collection<beanLivre> Coll() {
+        return livreAuteur.values();
+    }
+
 }

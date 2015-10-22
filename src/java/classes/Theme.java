@@ -1,19 +1,27 @@
 package classes;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Theme {
     
     private int idTheme;
     private String nomTheme;
     
-    private HashMap sousThemeTheme;
+    private List<SousTheme> sousThemeTheme;
+    
+        
+    public Theme() {
+        this.sousThemeTheme = new ArrayList<SousTheme>();
+    }
 
     public Theme(int idTheme, String nomTheme) {
+        this();
         this.idTheme = idTheme;
         this.nomTheme = nomTheme;
-        this.sousThemeTheme = new HashMap<Integer, Theme>(); 
+        
     }
+
 
     public int getIdTheme() {
         return idTheme;
@@ -31,11 +39,11 @@ public class Theme {
         this.nomTheme = nomTheme;
     }
 
-    public HashMap getSousThemeTheme() {
+    public List getSousThemeTheme() {
         return sousThemeTheme;
     }
 
-    public void setSousThemeTheme(HashMap sousThemeTheme) {
+    public void setSousThemeTheme(List sousThemeTheme) {
         this.sousThemeTheme = sousThemeTheme;
     }
 
